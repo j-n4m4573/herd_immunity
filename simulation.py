@@ -85,7 +85,7 @@ class Simulation(object):
         # TODO: Create a Logger object and bind it to self.logger.  You should use this
         # logger object to log all events of any importance during the simulation.  Don't forget
         # to call these logger methods in the corresponding parts of the simulation!
-        self.logger = Logger()
+        # self.logger = Logger()
 
         # This attribute will be used to keep track of all the people that catch
         # the infection during a given time step. We'll store each newly infected
@@ -95,7 +95,8 @@ class Simulation(object):
         self.newly_infected = []
         # TODO: Call self._create_population() and pass in the correct parameters.
         # Store the array that this method will return in the self.population attribute.
-        self._create_population(self, population_size, vacc_perentage, initial_infected)
+        self.population = self._create_population(initial_infected)
+
     def _create_population(self, initial_infected):
         # TODO: Finish this method!  This method should be called when the simulation
         # begins, to create the population that will be used. This method should return
@@ -104,11 +105,17 @@ class Simulation(object):
         # people vaccinated, correct number of initially infected people).
         population = []
         infected_count = 0
-        while len(population) != pop_size:
+        rand = random.randint(0,10000000)
+        id = rand
+        while len(population) != self.population_size:
             if infected_count !=  initial_infected:
                 # TODO: Create all the infected people first, and then worry about the rest.
                 # Don't forget to increment infected_count every time you create a
                 # new infected person!
+                # create an infected person obj
+                # create an id,
+                population.append(Person(id, false, Virus(virus_name, mortality_rate, basic_repro_num )))
+
                 pass
             else:
                 # Now create all the rest of the people.
@@ -201,6 +208,7 @@ class Simulation(object):
         pass
 
 if __name__ == "__main__":
+    print(sys.argv[1:])
     params = sys.argv[1:]
     pop_size = int(params[0])
     vacc_percentage = float(params[1])
