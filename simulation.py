@@ -2,6 +2,8 @@ import random, sys
 random.seed(42)
 from person import Person
 from logger import Logger
+from virus import Virus
+
 
 class Simulation(object):
     '''
@@ -113,10 +115,10 @@ class Simulation(object):
                 # new infected person!
                 # create an infected person obj
                 # create an id,
-                population.append(Person(id, false, Virus(virus_name, mortality_rate, basic_repro_num )))
+                population.append(Person(id, False, Virus(virus_name, mortality_rate, basic_repro_num )))
                 infected_count += 1
                 self.next_person_id = len(population) + 1
-                pass
+                # pass
             else:
                 # Now create all the rest of the people.
                 # Every time a new person will be created, generate a random number between
@@ -128,7 +130,7 @@ class Simulation(object):
                     population.append(Person(id, True))
                 else:
                     population.append(Person(id, False))
-                pass
+                # pass
             # TODO: After any Person object is created, whether sick or healthy,
             # you will need to increment self.next_person_id by 1. Each Person object's
             # ID has to be unique!
