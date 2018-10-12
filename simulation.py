@@ -105,8 +105,7 @@ class Simulation(object):
         # people vaccinated, correct number of initially infected people).
         population = []
         infected_count = 0
-        rand = random.randint(0,10000000)
-        id = rand
+        id = len(population)
         while len(population) != self.population_size:
             if infected_count !=  initial_infected:
                 # TODO: Create all the infected people first, and then worry about the rest.
@@ -115,7 +114,8 @@ class Simulation(object):
                 # create an infected person obj
                 # create an id,
                 population.append(Person(id, false, Virus(virus_name, mortality_rate, basic_repro_num )))
-
+                infected_count += 1
+                self.next_person_id = len(population) + 1
                 pass
             else:
                 # Now create all the rest of the people.
@@ -123,10 +123,16 @@ class Simulation(object):
                 # 0 and 1.  If this number is smaller than vacc_percentage, this person
                 # should be created as a vaccinated person. If not, the person should be
                 # created as an unvaccinated person.
+                rand = random.uniform(0,1)
+                if rand < self.vacc_percentage:
+                    population.append(Person(id, True))
+                else:
+                    population.append(Person(id, False))
                 pass
             # TODO: After any Person object is created, whether sick or healthy,
             # you will need to increment self.next_person_id by 1. Each Person object's
             # ID has to be unique!
+                self.next_person_id = len(population) + 1
         return population
 
     def _simulation_should_continue(self):
