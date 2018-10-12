@@ -146,7 +146,12 @@ class Simulation:
         #     - The entire population is dead.
         #     - There are no infected people left in the population.
         # In all other instances, the simulation should continue.
-        pass
+        for person in population:
+            if person.is_alive or self.infected_count != 0:
+                return True
+            else:
+                return False
+
 
     def run(self):
         # TODO: Finish this method.  This method should run the simulation until
@@ -162,12 +167,14 @@ class Simulation:
         time_step_counter = 0
         # TODO: Remember to set this variable to an intial call of
         # self._simulation_should_continue()!
-        should_continue = None
+        should_continue = self._simulation_should_continue()
+
         while should_continue:
         # TODO: for every iteration of this loop, call self.time_step() to compute another
         # round of this simulation.  At the end of each iteration of this loop, remember
         # to rebind should_continue to another call of self._simulation_should_continue()!
-            pass
+        self.time_step()
+        should_continue = self._simulation_should_continue()
         print('The simulation has ended after {} turns.'.format(time_step_counter))
 
     def time_step(self):
@@ -182,7 +189,8 @@ class Simulation:
             #           - Else:
             #               - Call simulation.interaction(person, random_person)
             #               - Increment interaction counter by 1.
-            pass
+        # for person in population:
+
 
     def interaction(self, person, random_person):
         # TODO: Finish this method! This method should be called any time two living
