@@ -119,7 +119,7 @@ class Simulation:
                 # create an id,
                 population.append(Person(id, False, Virus(virus_name, mortality_rate, basic_repro_num )))
                 infected_count += 1
-                print(len(population))
+                population[id - 1].did_survive_infection()
                 self.next_person_id = len(population) + 1
                 # pass
             else:
@@ -138,6 +138,7 @@ class Simulation:
             # you will need to increment self.next_person_id by 1. Each Person object's
             # ID has to be unique!
                 self.next_person_id = len(population) + 1
+
         return population
 
     def _simulation_should_continue(self):
@@ -209,6 +210,11 @@ class Simulation:
         assert person.is_alive == True
         assert random_person.is_alive == True
 
+        if random_person.is_vaccinated == False and random_person.infected == None:
+            rand = random.uniform(0,1)
+            if rand < self.basic_repro_num:
+                self.newly_infected.append(random_person._id)
+                random_person.did_survive_infection()
         # The possible cases you'll need to cover are listed below:
             # random_person is vaccinated:
             #     nothing happens to random person.
@@ -220,9 +226,9 @@ class Simulation:
             #     Simulation object's newly_infected array, so that their .infected
             #     attribute can be changed to True at the end of the time step.
         # TODO: Remember to call self.logger.log_interaction() during this method!
-        pass
+        self._infect_newly_infected(self.newly_infected)
 
-    def _infect_newly_infected(self):
+    def _infect_newly_infected(self, newly_infected):
         # TODO: Finish this method! This method should be called at the end of
         # every time step.  This method should iterate through the list stored in
         # self.newly_infected, which should be filled with the IDs of every person
@@ -232,8 +238,11 @@ class Simulation:
         #   - Set this Person's .infected attribute to True.
         # NOTE: Once you have iterated through the entire list of self.newly_infected, remember
         # to reset self.newly_infected back to an empty list!
-        pass
-
+        for id in newly_infected:
+            for person in self.population:
+                if person._id == id:
+                    person.infected = Virus(self.virus_name, self.mortality_rate, self.basic_repro_num)
+                    print(person._id)
 if __name__ == "__main__":
     print(sys.argv[1:])
     params = sys.argv[1:]
