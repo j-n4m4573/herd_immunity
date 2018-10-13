@@ -109,8 +109,8 @@ class Simulation:
         # people vaccinated, correct number of initially infected people).
         population = []
         infected_count = 0
-        id = len(population)
         while len(population) != self.population_size:
+            id = len(population)
             if infected_count !=  initial_infected:
                 # TODO: Create all the infected people first, and then worry about the rest.
                 # Don't forget to increment infected_count every time you create a
@@ -119,6 +119,7 @@ class Simulation:
                 # create an id,
                 population.append(Person(id, False, Virus(virus_name, mortality_rate, basic_repro_num )))
                 infected_count += 1
+                print(len(population))
                 self.next_person_id = len(population) + 1
                 # pass
             else:
@@ -147,7 +148,7 @@ class Simulation:
         #     - There are no infected people left in the population.
         # In all other instances, the simulation should continue.
         for person in self.population:
-            is_alive_check = Bool()
+            is_alive_check = bool()
             if person.is_alive or self.infected_count != 0:
                 is_alive_check = True
             else:
@@ -175,7 +176,7 @@ class Simulation:
         # round of this simulation.  At the end of each iteration of this loop, remember
         # to rebind should_continue to another call of self._simulation_should_continue()!
             self.time_step()
-            time_step_counter += 1 
+            time_step_counter += 1
         should_continue = self._simulation_should_continue()
         print('The simulation has ended after {} turns.'.format(time_step_counter))
 
@@ -192,23 +193,20 @@ class Simulation:
             #               - Call simulation.interaction(person, random_person)
             #               - Increment interaction counter by 1.
             for person in self.population:
-                count = 0
-                if person.infected:
-                    while count < 100:
+                interaction_count = 0
+                if person.infected != None:
+                    while interaction_count < 100:
                         if person.is_alive == True:
                             random_person = self.population[random.randint(0, len(self.population) - 1)]
-                            count += 1
-                            print(person.id)
-                else:
-                    interaction(person, random_person)
-
+                            self.interaction(person, random_person)
+                            interaction_count += 1
 
     def interaction(self, person, random_person):
         # TODO: Finish this method! This method should be called any time two living
         # people are selected for an interaction.  That means that only living people
         # should be passed into this method.  Assert statements are included to make sure
         # that this doesn't happen.
-        assert person1.is_alive == True
+        assert person.is_alive == True
         assert random_person.is_alive == True
 
         # The possible cases you'll need to cover are listed below:
