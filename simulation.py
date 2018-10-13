@@ -147,11 +147,12 @@ class Simulation:
         #     - There are no infected people left in the population.
         # In all other instances, the simulation should continue.
         for person in self.population:
+            is_alive_check = Bool()
             if person.is_alive or self.infected_count != 0:
-                return True
+                is_alive_check = True
             else:
-                return False
-
+                is_alive_check = False
+            return is_alive_check
 
     def run(self):
         # TODO: Finish this method.  This method should run the simulation until
@@ -174,6 +175,7 @@ class Simulation:
         # round of this simulation.  At the end of each iteration of this loop, remember
         # to rebind should_continue to another call of self._simulation_should_continue()!
             self.time_step()
+            time_step_counter += 1 
         should_continue = self._simulation_should_continue()
         print('The simulation has ended after {} turns.'.format(time_step_counter))
 
@@ -193,13 +195,13 @@ class Simulation:
                 count = 0
                 if person.infected:
                     while count < 100:
-                        random_person = self.population[random.randint(0, len(self.population) - 1)]
-                        print(random_person)
-                    if person.is_alive == False:
-                        random_person = self.population[random.ranint(0, len(self.population) - 1)]
+                        if person.is_alive == True:
+                            random_person = self.population[random.randint(0, len(self.population) - 1)]
+                            count += 1
+                            print(person.id)
                 else:
-                    simulaton.interaction(person, random_person)
-                    count += 1
+                    interaction(person, random_person)
+
 
     def interaction(self, person, random_person):
         # TODO: Finish this method! This method should be called any time two living
