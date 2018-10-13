@@ -108,18 +108,17 @@ class Simulation:
         # simulation (correct number of people in the population, correct percentage of
         # people vaccinated, correct number of initially infected people).
         population = []
-        infected_count = 0
         while len(population) != self.population_size:
             id = len(population)
-            if infected_count !=  initial_infected:
+            if self.total_infected !=  initial_infected:
                 # TODO: Create all the infected people first, and then worry about the rest.
                 # Don't forget to increment infected_count every time you create a
                 # new infected person!
                 # create an infected person obj
                 # create an id,
                 population.append(Person(id, False, Virus(virus_name, mortality_rate, basic_repro_num )))
-                infected_count += 1
-                population[id - 1].did_survive_infection()
+                self.total_infected += 1
+                population[id - 1].did_survive_infection(population[id - 1].infected.mortality_rate)
                 self.next_person_id = len(population) + 1
                 # pass
             else:
@@ -148,13 +147,13 @@ class Simulation:
         #     - The entire population is dead.
         #     - There are no infected people left in the population.
         # In all other instances, the simulation should continue.
+        is_alive_check = bool()
         for person in self.population:
-            is_alive_check = bool()
-            if person.is_alive or self.infected_count != 0:
+            if person.is_alive or self.total_infected != 0:
                 is_alive_check = True
             else:
                 is_alive_check = False
-            return is_alive_check
+        return is_alive_check
 
     def run(self):
         # TODO: Finish this method.  This method should run the simulation until
@@ -178,10 +177,11 @@ class Simulation:
         # to rebind should_continue to another call of self._simulation_should_continue()!
             self.time_step()
             time_step_counter += 1
-        should_continue = self._simulation_should_continue()
+            should_continue = self._simulation_should_continue()
         print('The simulation has ended after {} turns.'.format(time_step_counter))
 
     def time_step(self):
+            print("in time_step")
         # TODO: Finish this method!  This method should contain all the basic logic
         # for computing one time step in the simulation.  This includes:
             # - For each infected person in the population:
@@ -203,6 +203,7 @@ class Simulation:
                             interaction_count += 1
 
     def interaction(self, person, random_person):
+        print("in interaction")
         # TODO: Finish this method! This method should be called any time two living
         # people are selected for an interaction.  That means that only living people
         # should be passed into this method.  Assert statements are included to make sure
@@ -242,7 +243,9 @@ class Simulation:
             for person in self.population:
                 if person._id == id:
                     person.infected = Virus(self.virus_name, self.mortality_rate, self.basic_repro_num)
-                    print(person._id)
+                    person.infected.did_survive_infection()
+        self.newly_infected = []
+
 if __name__ == "__main__":
     print(sys.argv[1:])
     params = sys.argv[1:]

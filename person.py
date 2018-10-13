@@ -50,13 +50,13 @@ class Person:
         self.infected = infected
 
 
-    def did_survive_infection():
+    def did_survive_infection(self, mortality_rate):
         # TODO:  Finish this method. Follow the instructions in the class documentation
         # for resolve_infection.  If person dies, set is_alive to False and return False.
         # If person lives, set is_vaccinated = True, infected = None, return True.
         if self.infected != None:
-            rand = random.randint(0,1)
-            if rand < mortality_rate:
+            rand = random.uniform(0,1)
+            if rand < self.infected.mortality_rate:
                 self.is_alive = False
                 return False
             else:
