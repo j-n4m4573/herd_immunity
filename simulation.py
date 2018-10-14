@@ -83,6 +83,8 @@ class Simulation:
         self.mortality_rate = mortality_rate
         self.basic_repro_num = basic_repro_num
         self.initial_infected = initial_infected
+        self.interaction_count = 0
+        self.is_alive_check = bool()
         self.file_name = "{}_simulation_pop_{}_vp_{}_infected_{}.txt".format(
             virus_name, population_size, vacc_percentage, initial_infected)
 
@@ -147,7 +149,6 @@ class Simulation:
         #     - The entire population is dead.
         #     - There are no infected people left in the population.
         # In all other instances, the simulation should continue.
-        is_alive_check = bool()
         for person in self.population:
             if person.is_alive or self.total_infected != 0:
                 is_alive_check = True
@@ -176,12 +177,13 @@ class Simulation:
         # round of this simulation.  At the end of each iteration of this loop, remember
         # to rebind should_continue to another call of self._simulation_should_continue()!
             self.time_step()
+            self.interaction_count = 0
             time_step_counter += 1
             should_continue = self._simulation_should_continue()
+            print(time_step_counter)
         print('The simulation has ended after {} turns.'.format(time_step_counter))
 
     def time_step(self):
-            print("in time_step")
         # TODO: Finish this method!  This method should contain all the basic logic
         # for computing one time step in the simulation.  This includes:
             # - For each infected person in the population:
@@ -194,13 +196,12 @@ class Simulation:
             #               - Call simulation.interaction(person, random_person)
             #               - Increment interaction counter by 1.
             for person in self.population:
-                interaction_count = 0
-                if person.infected != None:
-                    while interaction_count < 100:
-                        if person.is_alive == True:
+                    if person.infected != None and person.is_alive == True:
+                        if self.interaction_count < 100:
                             random_person = self.population[random.randint(0, len(self.population) - 1)]
+                            self.interaction_count += 1
+                            print("interaction count: {}".format(self.interaction_count))
                             self.interaction(person, random_person)
-                            interaction_count += 1
 
     def interaction(self, person, random_person):
         print("in interaction")
@@ -208,14 +209,13 @@ class Simulation:
         # people are selected for an interaction.  That means that only living people
         # should be passed into this method.  Assert statements are included to make sure
         # that this doesn't happen.
-        assert person.is_alive == True
-        assert random_person.is_alive == True
-
+        # assert person.is_alive == True
+        # assert random_person.is_alive == True
         if random_person.is_vaccinated == False and random_person.infected == None:
             rand = random.uniform(0,1)
             if rand < self.basic_repro_num:
                 self.newly_infected.append(random_person._id)
-                random_person.did_survive_infection()
+                print(self.newly_infected)
         # The possible cases you'll need to cover are listed below:
             # random_person is vaccinated:
             #     nothing happens to random person.
@@ -241,9 +241,10 @@ class Simulation:
         # to reset self.newly_infected back to an empty list!
         for id in newly_infected:
             for person in self.population:
+                print(person._id)
                 if person._id == id:
                     person.infected = Virus(self.virus_name, self.mortality_rate, self.basic_repro_num)
-                    person.infected.did_survive_infection()
+                    person.did_survive_infection(self.mortality_rate)
         self.newly_infected = []
 
 if __name__ == "__main__":

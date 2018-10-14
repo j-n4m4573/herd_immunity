@@ -57,6 +57,7 @@ class Person:
         if self.infected != None:
             rand = random.uniform(0,1)
             if rand < self.infected.mortality_rate:
+                print(self.infected.mortality_rate)
                 self.is_alive = False
                 return False
             else:
