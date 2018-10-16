@@ -18,6 +18,13 @@ def test_create_pop() :
 
     population = sim._create_population(initial_infected)
 
+    person = Person(10, True, None)
+
+    assert person._id == 10
+    assert person.is_vaccinated == True
+    assert person.infected == None
+
+
     assert len(population) == pop_size
     vaccinated_people = 0
     for person in population:
