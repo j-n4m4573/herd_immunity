@@ -1,7 +1,8 @@
 import random, sys
 random.seed(42)
-from person import Person
-from logger import Logger
+from person import *
+from logger import *
+from simulation import *
 
 class Virus:
 
