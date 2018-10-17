@@ -11,7 +11,6 @@ def test_create_pop() :
     basic_repro_num = 1
     initial_infected = 1
 
-
     sim = simulation.Simulation(pop_size, vacc_percentage, virus_name, mortality_rate,
                             basic_repro_num, initial_infected)
 
