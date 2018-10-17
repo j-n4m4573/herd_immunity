@@ -1,8 +1,11 @@
-class Logger(object):
+import logging
+
+
+
+class Logger:
     '''
     Utility class responsible for logging all interactions of note during the
     simulation.
-
 
     _____Attributes______
 
@@ -53,8 +56,9 @@ class Logger(object):
     def __init__(self, file_name):
         # TODO:  Finish this initialization method.  The file_name passed should be the
         # full file name of the file that the logs will be written to.
-        # self.file_name = /Users/JGibbs/dev/herd_immunity/logger.py
-        pass
+
+        self.file_name = file_name
+
 
     def write_metadata(self, pop_size, vacc_percentage, virus_name, mortality_rate,
                        basic_repro_num):
@@ -68,7 +72,14 @@ class Logger(object):
         # since 'w' overwrites the file.
         # NOTE: Make sure to end every line with a '/n' character to ensure that each
         # event logged ends up on a separate line!
-        pass
+        with open(self.file_name, 'w') as logger:
+            logger.write('Metadata \n')
+            logger.write("Population Size: {}\n".format(pop_size))
+            logger.write("Percentage Vaccinated: {}\n".format(vacc_percentage))
+            logger.write("Virus Name: {}\n".format(virus_name))
+            logger.write("Mortality rate: {}\n".format(mortality_rate))
+            logger.write("Reproduction rate: {}\n".format(basic_repro_num))
+
 
     def log_interaction(self, person1, person2, did_infect=None,
                         person2_vacc=None, person2_sick=None):
@@ -78,12 +89,21 @@ class Logger(object):
         # person2 (the person randomly chosen for the interaction), and the optional
         # keyword arguments passed into the method.  See documentation for more info
         # on the format of the logs that this method should write.
-        # NOTE:  You'll need to think
-        # about how the booleans passed (or not passed) represent
-        # all the possible edge cases!
-        # NOTE: Make sure to end every line with a '/n' character to ensure that each
-        # event logged ends up on a separate line!
-        pass
+        if did_infect:
+            with open(self.file_name, 'a') as logger:
+                logger.write('Person_1 : {}, did infect, Person 2: {}\n'.format(person1._id, person_2._id))
+        else:
+            with open(self.file_name, 'a') as logger:
+                logger.write('Person_1 : {}, did not infect, Person 2: {}\n'.format(person1._id, person_2._id))
+
+
+        if person_sick:
+            with open(self.file_name, 'a') as logger:
+                logger.write('Person_2 : {}, was already sick \n'.format(person_2._id))
+        if person2_vacc:
+            with open(self.file_name, 'a') as logger:
+                logger.write('Person_2 : {}, was vaccinated \n'.format(person_2._id))
+
 
     def log_infection_survival(self, person, did_die_from_infection):
         # TODO: Finish this method.  The Simulation object should use this method to log
@@ -93,7 +113,9 @@ class Logger(object):
         # on the format of the log.
         # NOTE: Make sure to end every line with a '/n' character to ensure that each
         # event logged ends up on a separate line!
-        pass
+        with open(self.file_name, 'a') as logger:
+            logger.write("Person infected: {} and did die from infection= {}\n ".format(person, did_die_from_infection))
+
 
     def log_time_step(self, time_step_number):
         # TODO: Finish this method.  This method should log when a time step ends, and a
@@ -104,4 +126,5 @@ class Logger(object):
         # to compute these statistics for you, as a Logger's job is just to write logs!
         # NOTE: Make sure to end every line with a '/n' character to ensure that each
         # event logged ends up on a separate line!
-        pass
+        with open(self.file_name, 'a') as logger:
+            logger.write("Time Steps: {}\n".format(time_step_number))
